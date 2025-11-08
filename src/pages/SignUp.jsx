@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Mail, Lock, User } from 'lucide-react';
 import Logo from '../images/Logo.png';
 
-const SignUp = ({ onBack, onSuccess }) => {
+const SignUp = ({ onBack, onNavigateHome, onSuccess }) => {
   const [name, setName] = useState('');
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -11,6 +11,13 @@ const SignUp = ({ onBack, onSuccess }) => {
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  
+  const handleBackClick = () => {
+    // Navigate to home/branding page
+    if (onNavigateHome) {
+      onNavigateHome();
+    }
+  };
   
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,7 +31,7 @@ const SignUp = ({ onBack, onSuccess }) => {
     setError('');
     
     try {
-      const response = await fetch('https://zyntra-backend.azurewebsites.net/api/auth/user/register', {
+      const response = await fetch(import.meta.env.VITE_API_AUTH_REGISTER, {
         method: 'POST',
         headers: {
           'accept': 'application/json',
@@ -56,8 +63,19 @@ const SignUp = ({ onBack, onSuccess }) => {
   };
   
   return (
-    <div className="relative w-full min-h-screen bg-gradient-to-br from-night-blue via-night-deep to-forest-dark">
-      <div className="w-full px-6 sm:px-8 md:px-12 lg:px-16 py-8 md:py-12 lg:py-16 flex justify-center">
+    <div className="relative w-full h-screen bg-gradient-to-br from-night-blue via-night-deep to-forest-dark overflow-hidden flex items-center justify-center">
+      <div className="w-full px-6 sm:px-8 md:px-12 lg:px-16 flex justify-center items-center">
+        {/* Back Button */}
+        <motion.button
+          onClick={handleBackClick}
+          className="absolute top-4 left-4 md:top-6 md:left-6 text-forest-light hover:text-sunlight-yellow transition-colors p-2"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+        </motion.button>
         <motion.div
           className="w-full max-w-md"
           initial={{ opacity: 0, y: 20 }}
@@ -65,30 +83,30 @@ const SignUp = ({ onBack, onSuccess }) => {
           transition={{ duration: 0.5 }}
         >
           {/* Card */}
-          <div className="glass-card p-6 sm:p-6 md:p-7 rounded-2xl mb-8">
+          <div className="glass-card p-4 sm:p-5 md:p-6 rounded-2xl mb-6">
             {/* Header */}
-            <div className="text-center mb-3 md:mb-4">
+            <div className="text-center mb-2 md:mb-3">
               <motion.div
-                className="w-16 h-16 md:w-20 md:h-20 mx-auto mb-2"
+                className="w-14 h-14 md:w-16 md:h-16 mx-auto mb-1.5"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
               >
                 <img src={Logo} alt="Zyntra Logo" className="w-full h-full object-contain" />
               </motion.div>
-              <h1 className="text-xl sm:text-2xl md:text-2xl font-light text-white mb-1">Join Zyntra</h1>
+              <h1 className="text-lg sm:text-xl md:text-xl font-light text-white mb-0.5">Join Zyntra</h1>
               <p className="text-forest-light text-xs">Start growing your digital forest today</p>
             </div>
             
             {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-2.5 md:space-y-3">
+            <form onSubmit={handleSubmit} className="space-y-2 md:space-y-2.5">
               {error && (
-                <div className="bg-red-500 bg-opacity-10 border border-red-500 border-opacity-30 rounded-lg p-3 text-red-200 text-xs md:text-sm">
+                <div className="bg-red-500 bg-opacity-10 border border-red-500 border-opacity-30 rounded-lg p-2 text-red-200 text-xs">
                   {error}
                 </div>
               )}
               <div>
-                <label className="text-white text-xs font-light mb-1 block">
+                <label className="text-white text-xs font-light mb-0.5 block">
                   Full Name
                 </label>
                 <div className="relative">
@@ -180,7 +198,7 @@ const SignUp = ({ onBack, onSuccess }) => {
               <motion.button
                 type="submit"
                 disabled={loading}
-                className="w-full py-2.5 bg-forest-green text-white rounded-xl font-medium hover:bg-forest-dark transition-all shadow-lg mt-2 md:mt-3 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-2 bg-forest-green text-white rounded-xl font-medium hover:bg-forest-dark transition-all shadow-lg mt-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                 whileHover={!loading ? { scale: 1.02, boxShadow: '0 0 20px rgba(0, 168, 120, 0.5)' } : {}}
                 whileTap={!loading ? { scale: 0.98 } : {}}
               >
@@ -189,9 +207,9 @@ const SignUp = ({ onBack, onSuccess }) => {
             </form>
             
             {/* Divider */}
-            <div className="my-3 md:my-4 flex items-center gap-4">
+            <div className="my-2 md:my-3 flex items-center gap-4">
               <div className="flex-1 h-px bg-white bg-opacity-20"></div>
-              <span className="text-forest-light text-sm">or</span>
+              <span className="text-forest-light text-xs">or</span>
               <div className="flex-1 h-px bg-white bg-opacity-20"></div>
             </div>
             

@@ -9,6 +9,7 @@ import Chat from './pages/Chat';
 import Analytics from './pages/Analytics';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
+import GaitRecognition from './pages/GaitRecognition';
 
 const pageVariants = {
   initial: { opacity: 0, x: -20 },
@@ -23,14 +24,18 @@ const pageTransition = {
 };
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('dashboard');
+  const [currentPage, setCurrentPage] = useState('branding');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState('user'); // 'user' or 'admin'
   
   const handleAuthClick = (mode) => {
     setCurrentPage(mode);
   };
   
-  const handleAuthSuccess = () => {
-    setCurrentPage('home');
+  const handleAuthSuccess = (role = 'user') => {
+    setIsLoggedIn(true);
+    setUserRole(role);
+    setCurrentPage('gait');
   };
   
   const handleSignInToSignUp = () => {
@@ -41,14 +46,21 @@ function App() {
     setCurrentPage('signin');
   };
   
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setCurrentPage('branding');
+  };
+  
   const renderPage = () => {
     switch (currentPage) {
       case 'signin':
-        return <SignIn key="signin" onBack={handleSignInToSignUp} onSuccess={handleAuthSuccess} />;
+        return <SignIn key="signin" onBack={handleSignInToSignUp} onNavigateHome={() => setCurrentPage('branding')} onSuccess={handleAuthSuccess} />;
       case 'signup':
-        return <SignUp key="signup" onBack={handleSignUpToSignIn} onSuccess={handleAuthSuccess} />;
-      case 'dashboard':
-        return <BrandingDashboard key="dashboard" />;
+        return <SignUp key="signup" onBack={handleSignUpToSignIn} onNavigateHome={() => setCurrentPage('branding')} onSuccess={handleAuthSuccess} />;
+      case 'branding':
+        return <BrandingDashboard key="branding" onNavigate={setCurrentPage} />;
+      case 'gait':
+        return <GaitRecognition key="gait" userRole={userRole} />;
       case 'home':
         return <Home key="home" />;
       case 'workplace':
@@ -60,21 +72,23 @@ function App() {
       case 'analytics':
         return <Analytics key="analytics" />;
       default:
-        return <Home key="home" />;
+        return <BrandingDashboard key="branding" />;
     }
   };
   
   const isAuthPage = currentPage === 'signin' || currentPage === 'signup';
-  const isScrollablePage = currentPage === 'dashboard' || currentPage === 'workplace' || currentPage === 'analytics';
+  const isBrandingPage = currentPage === 'branding';
+  const isScrollablePage = currentPage === 'workplace' || currentPage === 'analytics' || currentPage === 'home' || currentPage === 'log' || currentPage === 'chat' || currentPage === 'gait';
   
   return (
-    <div className={`relative w-full h-screen bg-night-blue ${isAuthPage || isScrollablePage ? 'overflow-y-auto' : 'overflow-hidden'}`}>
-      {/* Header - Hide on auth pages */}
-      {!isAuthPage && (
+    <div className={`relative w-full h-screen ${isBrandingPage ? 'bg-black' : 'bg-night-blue'} ${isScrollablePage || isBrandingPage ? 'overflow-y-auto' : 'overflow-hidden'}`}>
+      {/* Header - Only show when logged in (not on branding or auth pages) */}
+      {isLoggedIn && !isAuthPage && (
         <Header 
           currentPage={currentPage} 
           onNavigate={setCurrentPage}
           onAuthClick={handleAuthClick}
+          onLogout={handleLogout}
         />
       )}
       

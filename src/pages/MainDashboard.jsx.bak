@@ -1,0 +1,285 @@
+import React from 'react';
+import { motion } from 'framer-motion';
+import { 
+  Heart, Brain, Activity, Users, TrendingUp, Shield,
+  Target, Zap, Eye, ArrowRight, Check, Sparkles
+} from 'lucide-react';
+
+const MainDashboard = () => {
+  
+  const problems = [
+    { text: 'Employees sitting for hours with poor posture', icon: Activity },
+    { text: 'Remote workers losing focus and feeling isolated', icon: Users },
+    { text: 'No system to detect early signs of fatigue', icon: Eye },
+    { text: 'Burnout leads to lower productivity & higher attrition', icon: TrendingUp }
+  ];
+
+  const solutions = [
+    { 
+      icon: Activity, 
+      title: 'Posture & Focus Tracking',
+      description: 'Real-time monitoring of posture score and focus hours',
+      color: 'from-blue-500 to-cyan-500'
+    },
+    { 
+      icon: Brain, 
+      title: 'AI-Powered Insights',
+      description: 'Empathetic AI that provides wellness suggestions proactively',
+      color: 'from-purple-500 to-pink-500'
+    },
+    { 
+      icon: Heart, 
+      title: 'Wellness Analytics',
+      description: 'Track engagement, fatigue, and attendance patterns',
+      color: 'from-green-500 to-emerald-500'
+    },
+    { 
+      icon: Zap, 
+      title: 'Quick Actions',
+      description: 'One-click wellness interventions: Break, Hydrate, Stretch',
+      color: 'from-orange-500 to-amber-500'
+    }
+  ];
+
+  const benefits = [
+    { stakeholder: 'Employees', benefit: 'Feel supported, improve posture & focus', icon: Heart },
+    { stakeholder: 'HR Teams', benefit: 'Detect disengagement early, improve retention', icon: Users },
+    { stakeholder: 'Companies', benefit: 'Enhance productivity with empathy', icon: Target }
+  ];
+
+  return (
+    <div className="min-h-screen h-full overflow-y-auto bg-gradient-to-br from-forest-900 via-forest-800 to-forest-900 pt-28 md:pt-32 px-4 md:px-8 pb-20">
+      <div className="max-w-7xl mx-auto">
+        
+        {/* Hero Section */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-12 text-center"
+        >
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <Sparkles className="w-10 h-10 text-green-400" />
+            <h1 className="text-5xl md:text-6xl font-bold text-white">
+              ZYNTRA
+            </h1>
+          </div>
+          <p className="text-2xl md:text-3xl text-green-300 mb-4">
+            Your Workplace Wellness & Attendance Buddy
+          </p>
+          <p className="text-lg text-forest-light max-w-3xl mx-auto">
+            Bridging technology with empathy to make workplace wellness visible, measurable, and actionable
+          </p>
+        </motion.div>
+
+        {/* Main Metrics */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
+          
+          {/* Eco Score */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="glass-card p-6 hover:bg-white/15 transition-all duration-300"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <Target className="w-5 h-5 text-green-400" />
+              <span className="text-xs text-green-400 flex items-center gap-1">
+                <TrendingUp className="w-3 h-3" />
+                12%
+              </span>
+            </div>
+            <h3 className="text-3xl md:text-4xl font-light text-white mb-1">{stats.ecoScore}</h3>
+            <p className="text-sm text-forest-light">Eco Score</p>
+          </motion.div>
+
+          {/* Streak */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="glass-card p-6 hover:bg-white/15 transition-all duration-300"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <Flame className="w-5 h-5 text-orange-400" />
+              <span className="text-xs text-orange-400">Active</span>
+            </div>
+            <h3 className="text-3xl md:text-4xl font-light text-white mb-1">{stats.streak}</h3>
+            <p className="text-sm text-forest-light">Day Streak</p>
+          </motion.div>
+
+          {/* Week Activities */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="glass-card p-6 hover:bg-white/15 transition-all duration-300"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <Calendar className="w-5 h-5 text-blue-400" />
+              <span className="text-xs text-blue-400">This Week</span>
+            </div>
+            <h3 className="text-3xl md:text-4xl font-light text-white mb-1">{stats.weekActivities}</h3>
+            <p className="text-sm text-forest-light">Activities</p>
+          </motion.div>
+
+          {/* Forest Health */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="glass-card p-6 hover:bg-white/15 transition-all duration-300"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <TreePine className="w-5 h-5 text-emerald-400" />
+              <span className="text-xs text-emerald-400">Healthy</span>
+            </div>
+            <h3 className="text-3xl md:text-4xl font-light text-white mb-1">{stats.forestHealth}%</h3>
+            <p className="text-sm text-forest-light">Forest Health</p>
+          </motion.div>
+
+        </div>
+
+        {/* Two Column Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
+          {/* Activity Overview */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="lg:col-span-2 glass-card p-6"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-light text-white">Recent Activity</h2>
+              <Activity className="w-5 h-5 text-forest-light" />
+            </div>
+
+            {activities.length > 0 ? (
+              <div className="space-y-3">
+                {activities.slice(-6).reverse().map((activity, index) => (
+                  <div 
+                    key={activity.id || index}
+                    className="flex items-center justify-between p-4 bg-white/5 rounded-lg hover:bg-white/10 transition-all"
+                  >
+                    <div className="flex-1">
+                      <p className="text-white text-sm">{activity.description}</p>
+                      <p className="text-forest-light text-xs mt-1">
+                        {new Date(activity.timestamp).toLocaleDateString()} · {activity.duration || 0} min
+                      </p>
+                    </div>
+                    <div className={`ml-4 px-3 py-1 rounded-full text-xs ${
+                      activity.ecoImpact > 0 
+                        ? 'bg-green-500/20 text-green-300' 
+                        : 'bg-red-500/20 text-red-300'
+                    }`}>
+                      {activity.ecoImpact > 0 ? '+' : ''}{activity.ecoImpact}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <Activity className="w-12 h-12 text-forest-light opacity-30 mx-auto mb-3" />
+                <p className="text-forest-light text-sm">No activities yet</p>
+              </div>
+            )}
+          </motion.div>
+
+          {/* Side Panel */}
+          <div className="space-y-6">
+            
+            {/* Statistics */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+              className="glass-card p-6"
+            >
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-light text-white">Statistics</h2>
+                <BarChart3 className="w-5 h-5 text-forest-light" />
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm text-forest-light">Total Activities</span>
+                    <span className="text-sm text-white font-medium">{stats.totalActivities}</span>
+                  </div>
+                  <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-gradient-to-r from-green-500 to-emerald-500"
+                      style={{ width: `${Math.min(stats.totalActivities * 2, 100)}%` }}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm text-forest-light">Achievements</span>
+                    <span className="text-sm text-white font-medium">{badges.length}</span>
+                  </div>
+                  <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-gradient-to-r from-yellow-500 to-orange-500"
+                      style={{ width: `${badges.length * 10}%` }}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm text-forest-light">Weekly Goal</span>
+                    <span className="text-sm text-white font-medium">{Math.min(stats.weekActivities * 10, 100)}%</span>
+                  </div>
+                  <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-gradient-to-r from-blue-500 to-cyan-500"
+                      style={{ width: `${Math.min(stats.weekActivities * 10, 100)}%` }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Achievements */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 }}
+              className="glass-card p-6"
+            >
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-light text-white">Achievements</h2>
+                <Award className="w-5 h-5 text-forest-light" />
+              </div>
+              
+              {badges.length > 0 ? (
+                <div className="space-y-3">
+                  {badges.slice(-3).reverse().map((badge, index) => (
+                    <div 
+                      key={badge.id || index}
+                      className="p-3 bg-white/5 rounded-lg"
+                    >
+                      <p className="text-white text-sm font-medium">{badge.name}</p>
+                      <p className="text-forest-light text-xs mt-1">{badge.description}</p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <Award className="w-12 h-12 text-forest-light opacity-30 mx-auto mb-3" />
+                  <p className="text-forest-light text-sm">No badges earned yet</p>
+                </div>
+              )}
+            </motion.div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+export default MainDashboard;

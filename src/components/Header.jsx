@@ -1,21 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Trees, BarChart3, MessageCircle, PlusCircle, Menu, X, User, LogOut, LayoutDashboard, Briefcase } from 'lucide-react';
+import { Trees, BarChart3, MessageCircle, PlusCircle, Menu, X, User, LogOut, LayoutDashboard, Briefcase, Video } from 'lucide-react';
 import Logo from '../images/Logo.png';
 
-const Header = ({ currentPage, onNavigate, onAuthClick }) => {
+const Header = ({ currentPage, onNavigate, onAuthClick, onLogout }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   
   useEffect(() => {
     // Check if user is logged in
     const authToken = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
     const userDataStr = localStorage.getItem('user_data') || sessionStorage.getItem('user_data');
+    const userType = localStorage.getItem('user_type') || sessionStorage.getItem('user_type');
     
     if (authToken && userDataStr) {
       setIsLoggedIn(true);
-      setUserData(JSON.parse(userDataStr));
+      const parsedUserData = JSON.parse(userDataStr);
+      setUserData(parsedUserData);
+      
+      // Check if user is admin
+      if (userType === 'admin' || parsedUserData.email?.toLowerCase().includes('admin')) {
+        setIsAdmin(true);
+      }
     }
   }, []);
   
@@ -37,7 +45,7 @@ const Header = ({ currentPage, onNavigate, onAuthClick }) => {
     return 'U';
   };
   
-  const handleLogout = () => {
+  const handleLogoutClick = () => {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('token_type');
     localStorage.removeItem('user_type');
@@ -46,18 +54,31 @@ const Header = ({ currentPage, onNavigate, onAuthClick }) => {
     sessionStorage.removeItem('user_data');
     setIsLoggedIn(false);
     setUserData(null);
+    setIsAdmin(false);
     setShowDropdown(false);
-    onNavigate('home');
+    if (onLogout) {
+      onLogout();
+    } else {
+      onNavigate('branding');
+    }
   };
   
-  const navItems = [
-    { id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+  // Define navigation items based on user role
+  const adminNavItems = [
+    { id: 'gait', icon: Video, label: 'Gait Recognition' },
     { id: 'home', icon: Trees, label: 'Forest' },
     { id: 'workplace', icon: Briefcase, label: 'Workplace' },
     { id: 'analytics', icon: BarChart3, label: 'Stats' },
     { id: 'chat', icon: MessageCircle, label: 'Chat' },
     { id: 'log', icon: PlusCircle, label: 'Log' },
   ];
+  
+  const userNavItems = [
+    { id: 'home', icon: Trees, label: 'Forest' },
+  ];
+  
+  // Use appropriate nav items based on user role
+  const navItems = isAdmin ? adminNavItems : userNavItems;
   
   return (
     <motion.header
@@ -153,7 +174,7 @@ const Header = ({ currentPage, onNavigate, onAuthClick }) => {
                   className="absolute top-16 right-0 glass-card rounded-xl p-2 min-w-[200px] shadow-xl"
                 >
                   <button
-                    onClick={handleLogout}
+                    onClick={handleLogoutClick}
                     className="w-full flex items-center gap-2 px-4 py-2 text-white hover:bg-red-500 hover:bg-opacity-20 rounded-lg transition-all"
                   >
                     <LogOut size={18} />

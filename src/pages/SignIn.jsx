@@ -1,14 +1,22 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Mail, Lock } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Mail, Lock, CheckCircle2 } from 'lucide-react';
 import Logo from '../images/Logo.png';
 
-const SignIn = ({ onBack, onSuccess }) => {
+const SignIn = ({ onBack, onNavigateHome, onSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  
+  const handleBackClick = () => {
+    // Navigate to home/branding page
+    if (onNavigateHome) {
+      onNavigateHome();
+    }
+  };
   
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,7 +24,7 @@ const SignIn = ({ onBack, onSuccess }) => {
     setError('');
     
     try {
-      const response = await fetch('https://zyntra-backend.azurewebsites.net/api/auth/login', {
+      const response = await fetch(import.meta.env.VITE_API_AUTH_LOGIN, {
         method: 'POST',
         headers: {
           'accept': 'application/json',
@@ -45,8 +53,16 @@ const SignIn = ({ onBack, onSuccess }) => {
           sessionStorage.setItem('user_data', JSON.stringify(data.user_data));
         }
         
-        alert(`Welcome back, ${data.user_data.full_name || data.user_data.email}!`);
-        onSuccess();
+        // Determine user role (admin if user_type is 'admin' or email contains 'admin')
+        const userRole = data.user_type === 'admin' || data.user_data.email?.toLowerCase().includes('admin') ? 'admin' : 'user';
+        
+        // Show success message
+        setSuccessMessage(`Welcome back, ${data.user_data.full_name || data.user_data.email}!`);
+        
+        // Navigate after a short delay
+        setTimeout(() => {
+          onSuccess(userRole);
+        }, 1500);
       } else {
         setError(data.detail || 'Sign in failed. Please check your credentials.');
       }
@@ -59,8 +75,19 @@ const SignIn = ({ onBack, onSuccess }) => {
   };
   
   return (
-    <div className="relative w-full min-h-screen bg-gradient-to-br from-night-blue via-night-deep to-forest-dark">
-      <div className="w-full px-6 sm:px-8 md:px-12 lg:px-16 py-8 md:py-12 lg:py-16 flex justify-center">
+    <div className="relative w-full h-screen bg-gradient-to-br from-night-blue via-night-deep to-forest-dark overflow-hidden flex items-center justify-center">
+      <div className="w-full px-6 sm:px-8 md:px-12 lg:px-16 flex justify-center items-center">
+        {/* Back Button */}
+        <motion.button
+          onClick={handleBackClick}
+          className="absolute top-4 left-4 md:top-6 md:left-6 text-forest-light hover:text-sunlight-yellow transition-colors p-2"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+        </motion.button>
         <motion.div
           className="w-full max-w-md"
           initial={{ opacity: 0, y: 20 }}
@@ -85,11 +112,31 @@ const SignIn = ({ onBack, onSuccess }) => {
             
             {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-3 md:space-y-4">
+              {/* Error Message */}
               {error && (
-                <div className="bg-red-500 bg-opacity-10 border border-red-500 border-opacity-30 rounded-lg p-3 text-red-200 text-xs md:text-sm">
+                <motion.div 
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-red-500 bg-opacity-10 border border-red-500 border-opacity-30 rounded-lg p-3 text-red-200 text-xs md:text-sm"
+                >
                   {error}
-                </div>
+                </motion.div>
               )}
+              
+              {/* Success Message */}
+              <AnimatePresence>
+                {successMessage && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9, y: -10 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    className="bg-green-500 bg-opacity-20 border-2 border-green-400 border-opacity-50 rounded-xl p-4 text-green-300 text-sm md:text-base flex items-center gap-3 shadow-lg"
+                  >
+                    <CheckCircle2 className="w-6 h-6 flex-shrink-0" />
+                    <span className="font-semibold">{successMessage}</span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
               <div>
                 <label className="text-white text-xs md:text-sm font-light mb-1.5 block">
                   Email Address
