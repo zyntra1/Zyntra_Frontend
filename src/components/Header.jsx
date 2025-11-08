@@ -65,7 +65,7 @@ const Header = ({ currentPage, onNavigate, onAuthClick, onLogout }) => {
   
   // Define navigation items based on user role
   const adminNavItems = [
-    { id: 'gait', icon: Video, label: 'Gait Recognition' },
+    { id: 'gait', icon: User, label: 'Profile' },
     { id: 'home', icon: Trees, label: 'Forest' },
     { id: 'workplace', icon: Briefcase, label: 'Workplace' },
     { id: 'analytics', icon: BarChart3, label: 'Stats' },
@@ -74,6 +74,7 @@ const Header = ({ currentPage, onNavigate, onAuthClick, onLogout }) => {
   ];
   
   const userNavItems = [
+    { id: 'gait', icon: User, label: 'Profile' },
     { id: 'home', icon: Trees, label: 'Forest' },
   ];
   
