@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Trees, BarChart3, MessageCircle, PlusCircle, Menu, X, User, LogOut, LayoutDashboard, Briefcase, Video } from 'lucide-react';
-import Logo from '../images/Logo.png';
+import { Trees, BarChart3, MessageCircle, PlusCircle, Menu, X, User, LogOut, LayoutDashboard, Briefcase, Video, Users, Activity, Heart } from 'lucide-react';
+import Logo from '../images/Logo.png?url';
 
 const Header = ({ currentPage, onNavigate, onAuthClick, onLogout }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -66,12 +66,11 @@ const Header = ({ currentPage, onNavigate, onAuthClick, onLogout }) => {
   
   // Define navigation items based on user role
   const adminNavItems = [
+    { id: 'wellness', icon: Heart, label: 'Dashboard' },
     { id: 'gait', icon: Video, label: 'Gait Recognition' },
+    { id: 'posture', icon: Activity, label: 'Posture Detection' },
+    { id: 'employees', icon: Users, label: 'Employees' },
     { id: 'home', icon: Trees, label: 'Forest' },
-    { id: 'workplace', icon: Briefcase, label: 'Workplace' },
-    { id: 'analytics', icon: BarChart3, label: 'Stats' },
-    { id: 'chat', icon: MessageCircle, label: 'Chat' },
-    { id: 'log', icon: PlusCircle, label: 'Log' },
   ];
   
   const userNavItems = [

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Header from './components/Header';
-import Home from './pages/Home';
+import AdminHome from './pages/admin/Home';
+import UserHome from './pages/user/Home';
 import BrandingDashboard from './pages/BrandingDashboard';
 import WorkplaceDashboard from './pages/WorkplaceDashboard';
 import DailyLog from './pages/DailyLog';
@@ -10,6 +11,9 @@ import Analytics from './pages/Analytics';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import GaitRecognition from './pages/GaitRecognition';
+import EmployeesList from './pages/admin/EmployeesList';
+import PostureDetection from './pages/admin/PostureDetection';
+import WellnessDashboard from './pages/admin/WellnessDashboard';
 
 const pageVariants = {
   initial: { opacity: 0, x: -20 },
@@ -61,8 +65,14 @@ function App() {
         return <BrandingDashboard key="branding" onNavigate={setCurrentPage} />;
       case 'gait':
         return <GaitRecognition key="gait" userRole={userRole} />;
+      case 'employees':
+        return <EmployeesList key="employees" />;
+      case 'posture':
+        return <PostureDetection key="posture" />;
+      case 'wellness':
+        return <WellnessDashboard key="wellness" />;
       case 'home':
-        return <Home key="home" />;
+        return userRole === 'admin' ? <AdminHome key="home" /> : <UserHome key="home" />;
       case 'workplace':
         return <WorkplaceDashboard key="workplace" />;
       case 'log':
@@ -78,7 +88,7 @@ function App() {
   
   const isAuthPage = currentPage === 'signin' || currentPage === 'signup';
   const isBrandingPage = currentPage === 'branding';
-  const isScrollablePage = currentPage === 'workplace' || currentPage === 'analytics' || currentPage === 'home' || currentPage === 'log' || currentPage === 'chat' || currentPage === 'gait';
+  const isScrollablePage = currentPage === 'workplace' || currentPage === 'analytics' || currentPage === 'home' || currentPage === 'log' || currentPage === 'chat' || currentPage === 'gait' || currentPage === 'employees' || currentPage === 'posture' || currentPage === 'wellness';
   
   return (
     <div className={`relative w-full h-screen ${isBrandingPage ? 'bg-black' : 'bg-night-blue'} ${isScrollablePage || isBrandingPage ? 'overflow-y-auto' : 'overflow-hidden'}`}>
