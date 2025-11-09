@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Trees, BarChart3, MessageCircle, PlusCircle, Menu, X, User, LogOut, LayoutDashboard, Briefcase, Video, Users, Activity, Heart } from 'lucide-react';
+import { Trees, BarChart3, MessageCircle, PlusCircle, Menu, X, User, LogOut, LayoutDashboard, Briefcase, Video, Users, Activity, Heart, Brain } from 'lucide-react';
 import Logo from '../images/Logo.png?url';
 
 const Header = ({ currentPage, onNavigate, onAuthClick, onLogout }) => {
@@ -76,6 +76,7 @@ const Header = ({ currentPage, onNavigate, onAuthClick, onLogout }) => {
   const userNavItems = [
     { id: 'gait', icon: User, label: 'Profile' },
     { id: 'home', icon: Trees, label: 'Forest' },
+    { id: 'ai-insights', icon: Brain, label: 'AI Insights' },
   ];
   
   // Use appropriate nav items based on user role

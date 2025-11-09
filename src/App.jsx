@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Header from './components/Header';
 import AdminHome from './pages/admin/Home';
 import UserHome from './pages/user/Home';
+import UserAIInsights from './pages/user/AIInsights';
 import BrandingDashboard from './pages/BrandingDashboard';
 import WorkplaceDashboard from './pages/WorkplaceDashboard';
 import DailyLog from './pages/DailyLog';
@@ -31,6 +32,23 @@ function App() {
   const [currentPage, setCurrentPage] = useState('branding');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState('user'); // 'user' or 'admin'
+  
+  // Check for existing authentication on mount
+  useEffect(() => {
+    const authToken = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
+    const userType = localStorage.getItem('user_type') || sessionStorage.getItem('user_type');
+    
+    if (authToken) {
+      setIsLoggedIn(true);
+      if (userType === 'admin') {
+        setUserRole('admin');
+        setCurrentPage('wellness');
+      } else {
+        setUserRole('user');
+        setCurrentPage('home');
+      }
+    }
+  }, []);
   
   const handleAuthClick = (mode) => {
     setCurrentPage(mode);
@@ -71,6 +89,8 @@ function App() {
         return <PostureDetection key="posture" />;
       case 'wellness':
         return <WellnessDashboard key="wellness" />;
+      case 'ai-insights':
+        return <UserAIInsights key="ai-insights" />;
       case 'home':
         return userRole === 'admin' ? <AdminHome key="home" /> : <UserHome key="home" />;
       case 'workplace':
@@ -88,7 +108,7 @@ function App() {
   
   const isAuthPage = currentPage === 'signin' || currentPage === 'signup';
   const isBrandingPage = currentPage === 'branding';
-  const isScrollablePage = currentPage === 'workplace' || currentPage === 'analytics' || currentPage === 'home' || currentPage === 'log' || currentPage === 'chat' || currentPage === 'gait' || currentPage === 'employees' || currentPage === 'posture' || currentPage === 'wellness';
+  const isScrollablePage = currentPage === 'workplace' || currentPage === 'analytics' || currentPage === 'home' || currentPage === 'log' || currentPage === 'chat' || currentPage === 'gait' || currentPage === 'employees' || currentPage === 'posture' || currentPage === 'wellness' || currentPage === 'ai-insights';
   
   return (
     <div className={`relative w-full h-screen ${isBrandingPage ? 'bg-black' : 'bg-night-blue'} ${isScrollablePage || isBrandingPage ? 'overflow-y-auto' : 'overflow-hidden'}`}>
